@@ -1,0 +1,137 @@
+// Built-in decks that don't depend on the textbook. Ids are stable: never rename one,
+// or the learner's review history for that card is lost.
+
+export type VerbSeed = { inf: string; mn: string; praet: string; partizip: string; helper: "haben" | "sein"; note?: string };
+export type PairSeed = { id: string; mn: string; de: string; hint?: string; accept?: string[] };
+export type RuleSeed = { id: string; tree: TreeId; front: string; back: string; example: string };
+
+export type TreeId = "verb_position" | "case" | "article" | "helper" | "adjective" | "hidden_verb";
+
+export const TREES: Record<TreeId, string> = {
+  verb_position: "Where does the verb go?",
+  case: "Which case?",
+  article: "Which article?",
+  helper: "haben or sein?",
+  adjective: "Which adjective ending?",
+  hidden_verb: "Hidden verb",
+};
+
+// Präteritum in the er-form. Partizip II with its helper.
+export const VERBS: VerbSeed[] = [
+  { inf: "sein", mn: "байх", praet: "war", partizip: "gewesen", helper: "sein" },
+  { inf: "haben", mn: "байх (эзэмших)", praet: "hatte", partizip: "gehabt", helper: "haben" },
+  { inf: "werden", mn: "болох", praet: "wurde", partizip: "geworden", helper: "sein" },
+  { inf: "gehen", mn: "явах (явганаар)", praet: "ging", partizip: "gegangen", helper: "sein" },
+  { inf: "kommen", mn: "ирэх", praet: "kam", partizip: "gekommen", helper: "sein" },
+  { inf: "fahren", mn: "явах (унаагаар)", praet: "fuhr", partizip: "gefahren", helper: "sein" },
+  { inf: "bleiben", mn: "үлдэх", praet: "blieb", partizip: "geblieben", helper: "sein" },
+  { inf: "sterben", mn: "үхэх, нас барах", praet: "starb", partizip: "gestorben", helper: "sein" },
+  { inf: "aufstehen", mn: "босох", praet: "stand auf", partizip: "aufgestanden", helper: "sein" },
+  { inf: "essen", mn: "идэх", praet: "aß", partizip: "gegessen", helper: "haben" },
+  { inf: "trinken", mn: "уух", praet: "trank", partizip: "getrunken", helper: "haben" },
+  { inf: "lesen", mn: "унших", praet: "las", partizip: "gelesen", helper: "haben" },
+  { inf: "sehen", mn: "харах", praet: "sah", partizip: "gesehen", helper: "haben" },
+  { inf: "sprechen", mn: "ярих", praet: "sprach", partizip: "gesprochen", helper: "haben" },
+  { inf: "schreiben", mn: "бичих", praet: "schrieb", partizip: "geschrieben", helper: "haben" },
+  { inf: "nehmen", mn: "авах", praet: "nahm", partizip: "genommen", helper: "haben" },
+  { inf: "geben", mn: "өгөх", praet: "gab", partizip: "gegeben", helper: "haben" },
+  { inf: "finden", mn: "олох", praet: "fand", partizip: "gefunden", helper: "haben" },
+  { inf: "schlafen", mn: "унтах", praet: "schlief", partizip: "geschlafen", helper: "haben" },
+  { inf: "liegen", mn: "хэвтэх", praet: "lag", partizip: "gelegen", helper: "haben" },
+  { inf: "sitzen", mn: "суух (сууж байх)", praet: "saß", partizip: "gesessen", helper: "haben" },
+  { inf: "stehen", mn: "зогсох (зогсож байх)", praet: "stand", partizip: "gestanden", helper: "haben" },
+  { inf: "denken", mn: "бодох", praet: "dachte", partizip: "gedacht", helper: "haben" },
+  { inf: "bringen", mn: "авчрах", praet: "brachte", partizip: "gebracht", helper: "haben" },
+  { inf: "wissen", mn: "мэдэх", praet: "wusste", partizip: "gewusst", helper: "haben" },
+  { inf: "kennen", mn: "таних", praet: "kannte", partizip: "gekannt", helper: "haben" },
+  { inf: "helfen", mn: "туслах", praet: "half", partizip: "geholfen", helper: "haben" },
+  { inf: "treffen", mn: "уулзах", praet: "traf", partizip: "getroffen", helper: "haben" },
+  { inf: "beginnen", mn: "эхлэх", praet: "begann", partizip: "begonnen", helper: "haben" },
+  { inf: "anfangen", mn: "эхлэх (салдаг)", praet: "fing an", partizip: "angefangen", helper: "haben" },
+  { inf: "anrufen", mn: "утасдах", praet: "rief an", partizip: "angerufen", helper: "haben" },
+  { inf: "einladen", mn: "урих", praet: "lud ein", partizip: "eingeladen", helper: "haben" },
+  { inf: "verstehen", mn: "ойлгох", praet: "verstand", partizip: "verstanden", helper: "haben" },
+  { inf: "versprechen", mn: "амлах", praet: "versprach", partizip: "versprochen", helper: "haben" },
+  { inf: "verbieten", mn: "хориглох", praet: "verbot", partizip: "verboten", helper: "haben" },
+  { inf: "bekommen", mn: "хүлээн авах", praet: "bekam", partizip: "bekommen", helper: "haben" },
+  { inf: "übernehmen", mn: "хариуцаж авах", praet: "übernahm", partizip: "übernommen", helper: "haben" },
+  { inf: "empfehlen", mn: "зөвлөх, санал болгох", praet: "empfahl", partizip: "empfohlen", helper: "haben" },
+  { inf: "bestehen", mn: "(шалгалтад) тэнцэх", praet: "bestand", partizip: "bestanden", helper: "haben" },
+  { inf: "vergessen", mn: "мартах", praet: "vergaß", partizip: "vergessen", helper: "haben" },
+  { inf: "werfen", mn: "шидэх", praet: "warf", partizip: "geworfen", helper: "haben" },
+  { inf: "fallen", mn: "унах", praet: "fiel", partizip: "gefallen", helper: "sein" },
+  { inf: "tragen", mn: "зөөх; өмсөх", praet: "trug", partizip: "getragen", helper: "haben" },
+  { inf: "waschen", mn: "угаах", praet: "wusch", partizip: "gewaschen", helper: "haben" },
+  { inf: "laufen", mn: "гүйх; алхах", praet: "lief", partizip: "gelaufen", helper: "sein" },
+  { inf: "rufen", mn: "дуудах", praet: "rief", partizip: "gerufen", helper: "haben" },
+  { inf: "ziehen", mn: "татах", praet: "zog", partizip: "gezogen", helper: "haben", note: "umziehen (нүүх) → ist umgezogen" },
+  { inf: "fliegen", mn: "нисэх", praet: "flog", partizip: "geflogen", helper: "sein" },
+  { inf: "schneiden", mn: "огтлох", praet: "schnitt", partizip: "geschnitten", helper: "haben" },
+  { inf: "singen", mn: "дуулах", praet: "sang", partizip: "gesungen", helper: "haben" },
+  { inf: "schwimmen", mn: "сэлэх", praet: "schwamm", partizip: "geschwommen", helper: "sein" },
+  { inf: "verlieren", mn: "алдах, гээх", praet: "verlor", partizip: "verloren", helper: "haben" },
+  { inf: "gewinnen", mn: "ялах, хожих", praet: "gewann", partizip: "gewonnen", helper: "haben" },
+  { inf: "halten", mn: "барих; зогсох", praet: "hielt", partizip: "gehalten", helper: "haben" },
+  { inf: "lassen", mn: "орхих; зөвшөөрөх", praet: "ließ", partizip: "gelassen", helper: "haben" },
+  { inf: "heißen", mn: "нэрлэгдэх", praet: "hieß", partizip: "geheißen", helper: "haben" },
+  { inf: "tun", mn: "хийх", praet: "tat", partizip: "getan", helper: "haben" },
+  { inf: "frieren", mn: "даарах", praet: "fror", partizip: "gefroren", helper: "haben" },
+  { inf: "brechen", mn: "хугалах", praet: "brach", partizip: "gebrochen", helper: "haben" },
+  { inf: "entscheiden", mn: "шийдэх", praet: "entschied", partizip: "entschieden", helper: "haben" },
+];
+
+export const PAIRS: PairSeed[] = [
+  { id: "massnahmen-ergreifen", mn: "арга хэмжээ авах", de: "Maßnahmen ergreifen" },
+  { id: "entscheidung-treffen", mn: "шийдвэр гаргах", de: "eine Entscheidung treffen" },
+  { id: "frage-stellen", mn: "асуулт асуух", de: "eine Frage stellen" },
+  { id: "rolle-spielen", mn: "үүрэг гүйцэтгэх, чухал байх", de: "eine Rolle spielen" },
+  { id: "bescheid-sagen", mn: "мэдэгдэх, хэлж өгөх", de: "Bescheid sagen" },
+  { id: "angst-haben", mn: "айх", de: "Angst haben", hint: "+ vor + Dat", accept: ["Angst haben vor"] },
+  { id: "zeit-haben", mn: "завтай байх", de: "Zeit haben" },
+  { id: "ausflug-machen", mn: "зугаалгаар явах, аялал хийх", de: "einen Ausflug machen" },
+  { id: "einfluss-auf", mn: "…-д нөлөө үзүүлэх (нэр үгээр)", de: "Einfluss auf + Akk haben", accept: ["Einfluss haben auf", "Einfluss auf haben"] },
+  { id: "entscheiden-fuer", mn: "…-ыг сонгох, …-ын төлөө шийдэх", de: "sich entscheiden für + Akk" },
+  { id: "warten-auf", mn: "…-ыг хүлээх", de: "warten auf + Akk" },
+  { id: "freuen-auf", mn: "…-ыг тэсэн ядан хүлээх", de: "sich freuen auf + Akk" },
+  { id: "schuetzen-vor", mn: "…-аас хамгаалах", de: "schützen vor + Dat" },
+  { id: "investieren-in", mn: "…-д хөрөнгө оруулах", de: "investieren in + Akk" },
+  { id: "profitieren-von", mn: "…-аас ашиг хүртэх", de: "profitieren von + Dat" },
+  { id: "auswirken-auf", mn: "…-д нөлөөлөх (үйл үгээр, sich …)", de: "sich auswirken auf + Akk" },
+];
+
+export const RULES: RuleSeed[] = [
+  // Verb position
+  { id: "vp-question", tree: "verb_position", front: "Yes/no question or a command. Where does the conjugated verb go?", back: "First.", example: "**Kommst** du mit? · **Komm** her!" },
+  { id: "vp-ns", tree: "verb_position", front: "The clause starts with weil, dass, ob, wenn, als, obwohl, nachdem… Where does the conjugated verb go?", back: "Last (Nebensatz).", example: "…, weil ich müde **bin**." },
+  { id: "vp-slot0", tree: "verb_position", front: "The clause starts with und, aber, oder, denn or sondern. Where does the verb go?", back: "These words don't count (slot 0). Normal order: subject, then verb in slot 2.", example: "…, denn ich **bin** müde." },
+  { id: "vp-slot1", tree: "verb_position", front: "The sentence starts with deshalb, trotzdem, heute or any other word that isn't the subject. Where does the verb go?", back: "Slot 2: right after that first part. The subject comes behind the verb.", example: "Deshalb **gehe** ich nach Hause." },
+  { id: "vp-ns-first", tree: "verb_position", front: "A Nebensatz comes first. Where does the main clause verb go?", back: "Right after the comma: verb, verb.", example: "Weil ich müde bin, **gehe** ich nach Hause." },
+  { id: "vp-second-verb", tree: "verb_position", front: "Main clause with a modal verb or Perfekt. Where does the second verb go?", back: "To the very end.", example: "Ich kann gut **schwimmen**. Ich habe Deutsch **gelernt**." },
+  { id: "vp-ns-two-verbs", tree: "verb_position", front: "Nebensatz with a modal verb or Perfekt. In what order do the verbs stand at the end?", back: "Infinitiv / Partizip first, the conjugated verb last.", example: "…, weil ich arbeiten **muss**. …, dass er gekommen **ist**." },
+  // Case
+  { id: "case-dat-verbs", tree: "case", front: "The verb is helfen, danken, gefallen, gehören, glauben, gratulieren, schmecken or schaden. Which case?", back: "Dativ (өгөх-оршихын).", example: "Ich helfe **dem** Kind." },
+  { id: "case-dat-prep", tree: "case", front: "After aus, bei, mit, nach, seit, von, zu. Which case?", back: "Always Dativ.", example: "mit **dem** Bus · zu**r** Schule" },
+  { id: "case-akk-prep", tree: "case", front: "After durch, für, gegen, ohne, um, bis. Which case?", back: "Always Akkusativ (заахын).", example: "für **meinen** Bruder" },
+  { id: "case-wo", tree: "case", front: "in, an, auf, unter, über, vor, hinter, neben, zwischen. Answers Wo? (no movement). Which case?", back: "Dativ.", example: "Das Buch liegt auf **dem** Tisch." },
+  { id: "case-wohin", tree: "case", front: "in, an, auf, unter, über, vor, hinter, neben, zwischen. Answers Wohin? (movement to a place). Which case?", back: "Akkusativ.", example: "Ich lege das Buch auf **den** Tisch." },
+  { id: "case-gen-prep", tree: "case", front: "After wegen, trotz, während, statt, aufgrund. Which case?", back: "Genitiv (харьяалахын).", example: "wegen **des** Regens" },
+  { id: "case-giving", tree: "case", front: "Giving verb (geben, schenken, zeigen, bringen) with a person and a thing. Which comes first?", back: "Person (Dativ) first, thing (Akk) second. But a pronoun thing goes first.", example: "Ich gebe **dem Kind** das Buch. Ich gebe **es** dem Kind." },
+  { id: "case-haben", tree: "case", front: "Object after haben or es gibt. Which case?", back: "Always Akkusativ.", example: "Ich habe **einen** Bruder. Es gibt **einen** Park." },
+  // Article
+  { id: "art-definite", tree: "article", front: "The Mongolian object has -ыг / -ийг / -г. Which article?", back: "der / die / das: a specific, known thing.", example: "Номыг уншлаа → Ich habe **das** Buch gelesen." },
+  { id: "art-indefinite", tree: "article", front: "The Mongolian object has no ending. Which article?", back: "ein- (a/one), or no article for plurals and uncountables.", example: "Ном уншлаа → Ich habe **ein** Buch gelesen." },
+  { id: "art-kein", tree: "article", front: "A noun is negated (машингүй, мөнгө байхгүй). kein or nicht?", back: "kein (with ein's endings).", example: "Ich habe **kein** Auto. Ich habe **keine** Zeit." },
+  // Helper
+  { id: "helper-sein", tree: "helper", front: "Perfekt: a verb of movement (A → B) or change of state. haben or sein?", back: "sein.", example: "Ich **bin** gefahren. Er **ist** eingeschlafen." },
+  { id: "helper-sein-extra", tree: "helper", front: "Perfekt of sein, bleiben, passieren, werden. haben or sein?", back: "sein.", example: "Ich **bin** zu Hause geblieben." },
+  { id: "helper-haben", tree: "helper", front: "Perfekt: every other verb (incl. all reflexive verbs and verbs with an Akk object). haben or sein?", back: "haben.", example: "Ich **habe** mich gefreut. Ich **habe** das Auto gefahren." },
+  { id: "helper-no-ge", tree: "helper", front: "Partizip II: the verb starts with be-, ver-, er-, ent-, emp-, ge-, miss-, zer- or ends in -ieren. ge- or not?", back: "No ge-.", example: "verstanden · bekommen · studiert" },
+  // Adjective
+  { id: "adj-nom-der", tree: "adjective", front: "Adjective after der / die / das in Nominativ singular. Which ending?", back: "-e", example: "der neu**e** Lehrer" },
+  { id: "adj-en", tree: "adjective", front: "Adjective after an article in Dativ, in Genitiv, or in the plural. Which ending?", back: "-en", example: "mit dem neu**en** Lehrer · die neu**en** Bücher" },
+  { id: "adj-bare-ein", tree: "adjective", front: "Adjective after bare ein (no ending), with a der-noun or a das-noun. Which ending?", back: "-er (der-noun), -es (das-noun): the adjective shows the gender.", example: "ein neu**er** Tisch · ein neu**es** Buch" },
+  { id: "adj-no-article", tree: "adjective", front: "Adjective with no article at all. Which ending?", back: "The ending der/den/dem/des would have.", example: "gut**er** Wein · mit gut**em** Wein · heutig**e** Jugendliche" },
+  // Hidden verb
+  { id: "hv-sein", tree: "hidden_verb", front: "The Mongolian sentence ends in an adjective or noun with байна, or with no verb at all (Би ядарсан, Тэр оюутан).", back: "Add sein.", example: "Ich **bin** müde. Er **ist** Student." },
+  { id: "hv-haben", tree: "hidden_verb", front: "Mongolian: надад … байна / …-тай (I have).", back: "haben + Akkusativ.", example: "Ich **habe** einen Bruder." },
+];

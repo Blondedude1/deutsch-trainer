@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { Bar, Button, Card, Chip, Label, LinkButton, StatTile } from "@/components/ui/primitives";
+import { Bar, Button, Card, Chip, Label, StatTile } from "@/components/ui/primitives";
+import { TodayCard } from "@/components/study/TodayCard";
 import { LEARNER } from "@/lib/config";
 import { db, type Topic } from "@/lib/db";
-import { EMPTY_SEAL, sealByTopic, topicChip, useActiveSeconds, useAttempts, useMeta, useTopics } from "@/lib/hooks";
-import { dayKey, formatDuration } from "@/lib/logic/core";
+import { EMPTY_SEAL, sealByTopic, topicChip, useActiveSeconds, useAttempts, useTopics } from "@/lib/hooks";
+import { formatDuration } from "@/lib/logic/core";
 import { leakRanking, streaks } from "@/lib/logic/stats";
 import { TAG_INFO } from "@/lib/tags";
 
@@ -14,7 +15,6 @@ export default function Home() {
   const topics = useTopics();
   const attempts = useAttempts();
   const activeToday = useActiveSeconds();
-  const qaDone = useMeta<string | null>("qaDone", null) === dayKey();
   const [adding, setAdding] = useState(false);
 
   const derived = useMemo(() => {
@@ -26,7 +26,6 @@ export default function Home() {
   const sealedCount = unlocked.filter((t) => derived.seal.get(t.id)?.sealed).length;
   const top = derived.leaks.slice(0, 3);
   const maxLeak = Math.max(1, ...top.map((l) => l.count));
-  const qaTags = top.map((l) => l.tag);
 
   return (
     <div className="flex flex-col gap-4 px-5 pt-5 md:pt-8 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:items-start lg:gap-10">
@@ -46,21 +45,7 @@ export default function Home() {
         <StatTile label="Sealed" value={`${sealedCount}/${unlocked.length}`} />
       </div>
 
-      <div className="flex items-center justify-between gap-3 rounded-[14px] border border-accent-line bg-accent-deep p-3.5">
-        <div className="flex flex-col gap-0.5">
-          <span className="font-head text-[17px] font-bold">Daily QA</span>
-          <span className="text-xs text-soft">
-            {qaDone ? "Done for today." : qaTags.length ? "10 questions from your weakest leaks" : "Unlocks after your first mistakes"}
-          </span>
-        </div>
-        {qaDone ? (
-          <Chip tone="success">DONE</Chip>
-        ) : qaTags.length ? (
-          <LinkButton href={`/drill?qa=${qaTags.join(",")}`} className="min-h-11 px-5">
-            Start
-          </LinkButton>
-        ) : null}
-      </div>
+      <TodayCard />
 
       <section className="flex flex-col gap-2.5">
         <Label>Weakest leaks</Label>

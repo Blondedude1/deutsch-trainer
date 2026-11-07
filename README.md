@@ -34,6 +34,13 @@ node scripts/acceptance.mjs http://localhost:3000
 | Local database | `lib/db.ts` |
 | API routes | `app/api/generate`, `app/api/grade` |
 
+## Study (Anki-style)
+
+- Cards live in IndexedDB (`cards` table) and are scheduled with FSRS (`lib/srs/`), Anki's default algorithm.
+- Built-in decks: 60 irregular verbs, 16 fixed pairs, 28 grammar rule cards (`lib/seed/decks.ts`). Textbook sentence and noun decks are added per lesson.
+- The grader sets the low ratings: wrong → Again, minor → Hard. Only a clean answer lets you pick Good or Easy. Rule cards are self-rated.
+- Verb, pair and noun cards are checked on the device (free). Sentence cards use the textbook answer first, then the AI grader if the answer differs.
+
 ## Rules worth knowing
 
 - **Counted** = the first, unpeeked attempt on an item. Only counted attempts move the streak and sealing. A peek resets the streak.

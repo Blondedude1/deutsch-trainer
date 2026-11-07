@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { syncSeedTopics } from "@/lib/db";
+import { syncSeedCards, syncSeedTopics } from "@/lib/db";
 import { isChunkError, repairAndReload } from "@/lib/repair";
 import { useActiveTimeTracker } from "@/lib/logic/activeTime";
 import { BottomNav, TopNav } from "./ui/BottomNav";
@@ -13,6 +13,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     syncSeedTopics().catch(() => {});
+    syncSeedCards().catch(() => {});
     // A broken cached script: repair once automatically instead of showing a crash.
     const onError = (msg: string) => {
       if (!isChunkError(msg)) return;
@@ -35,7 +36,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  const showNav = !path.startsWith("/drill");
+  const showNav = !path.startsWith("/drill") && !path.startsWith("/study");
 
   return (
     <div

@@ -35,6 +35,9 @@ export const MISTAKE_TAGS = [
   "capitalization",
   "comma",
   "spelling",
+  "verb_form",
+  "gender",
+  "plural_form",
 ] as const;
 
 export type MistakeTag = (typeof MISTAKE_TAGS)[number];
@@ -77,4 +80,7 @@ export const TAG_INFO: Record<MistakeTag, { label: string; hint: string }> = {
   capitalization: { label: "Noun capitalization", hint: "All nouns start with a capital." },
   comma: { label: "Comma before NS", hint: "Comma before weil, dass, ob, wenn…" },
   spelling: { label: "Spelling (d/t, p/f…)", hint: "Watch d/t and p/f swaps: Auto, Vater, kaufe." },
+  verb_form: { label: "Irregular verb forms", hint: "Präteritum and Partizip II stems must be learned." },
+  gender: { label: "Noun gender", hint: "Learn every noun with der / die / das." },
+  plural_form: { label: "Plural forms", hint: "Learn every noun with its plural." },
 };
