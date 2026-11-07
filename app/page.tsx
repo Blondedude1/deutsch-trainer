@@ -1,103 +1,138 @@
-import Image from "next/image";
+"use client";
+
+import Link from "next/link";
+import { useMemo, useState } from "react";
+import { Bar, Button, Card, Chip, Label, LinkButton, StatTile } from "@/components/ui/primitives";
+import { LEARNER } from "@/lib/config";
+import { db, type Topic } from "@/lib/db";
+import { EMPTY_SEAL, sealByTopic, topicChip, useActiveSeconds, useAttempts, useMeta, useTopics } from "@/lib/hooks";
+import { dayKey, formatDuration } from "@/lib/logic/core";
+import { leakRanking, streaks } from "@/lib/logic/stats";
+import { TAG_INFO } from "@/lib/tags";
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const topics = useTopics();
+  const attempts = useAttempts();
+  const activeToday = useActiveSeconds();
+  const qaDone = useMeta<string | null>("qaDone", null) === dayKey();
+  const [adding, setAdding] = useState(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const derived = useMemo(() => {
+    const list = attempts ?? [];
+    return { seal: sealByTopic(list), streak: streaks(list), leaks: leakRanking(list) };
+  }, [attempts]);
+
+  const unlocked = (topics ?? []).filter((t) => t.status === "active");
+  const sealedCount = unlocked.filter((t) => derived.seal.get(t.id)?.sealed).length;
+  const top = derived.leaks.slice(0, 3);
+  const maxLeak = Math.max(1, ...top.map((l) => l.count));
+  const qaTags = top.map((l) => l.tag);
+
+  return (
+    <div className="flex flex-col gap-4 px-5 pt-5">
+      <header className="flex items-center justify-between">
+        <span className="font-mono text-xs tracking-[2px] text-muted">DEUTSCH TRAINER</span>
+      </header>
+
+      <div className="flex flex-col gap-1">
+        <h1 className="m-0 font-head text-[32px] leading-tight font-bold">{LEARNER.name}</h1>
+        <p className="m-0 text-sm text-muted">{LEARNER.levelLine}</p>
+      </div>
+
+      <div className="grid grid-cols-3 gap-2">
+        <StatTile label="Active today" value={formatDuration(activeToday)} />
+        <StatTile label="Clean streak" value={String(derived.streak.current)} />
+        <StatTile label="Sealed" value={`${sealedCount}/${unlocked.length}`} />
+      </div>
+
+      <div className="flex items-center justify-between gap-3 rounded-[14px] border border-accent-line bg-accent-deep p-3.5">
+        <div className="flex flex-col gap-0.5">
+          <span className="font-head text-[17px] font-bold">Daily QA</span>
+          <span className="text-xs text-soft">
+            {qaDone ? "Done for today." : qaTags.length ? "10 questions from your weakest leaks" : "Unlocks after your first mistakes"}
+          </span>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        {qaDone ? (
+          <Chip tone="success">DONE</Chip>
+        ) : qaTags.length ? (
+          <LinkButton href={`/drill?qa=${qaTags.join(",")}`} className="min-h-11 px-5">
+            Start
+          </LinkButton>
+        ) : null}
+      </div>
+
+      <section className="flex flex-col gap-2.5">
+        <Label>Weakest leaks</Label>
+        {top.length === 0 && <p className="m-0 text-[13px] text-muted">No mistakes logged in the last 7 days.</p>}
+        {top.map((l) => (
+          <Link key={l.tag} href="/leaks" className="flex flex-col gap-1">
+            <div className="flex justify-between gap-3 text-[13px]">
+              <span>{TAG_INFO[l.tag].label}</span>
+              <span className="font-mono text-warn">{l.count}</span>
+            </div>
+            <Bar pct={(l.count / maxLeak) * 100} />
+          </Link>
+        ))}
+      </section>
+
+      <section className="flex flex-col gap-2">
+        <div className="flex items-center justify-between gap-2">
+          <Label>Skill tree</Label>
+          <button
+            type="button"
+            onClick={() => setAdding((a) => !a)}
+            aria-expanded={adding}
+            className="min-h-11 rounded-lg border border-dashed border-accent-line px-2.5 text-xs font-semibold text-accent"
+          >
+            {adding ? "Close" : "+ Add today's class topic"}
+          </button>
+        </div>
+
+        {adding && <UnlockPanel topics={(topics ?? []).filter((t) => t.status === "locked")} onDone={() => setAdding(false)} />}
+
+        {[1, 2].map((lvl) => (
+          <div key={lvl} className="flex flex-col gap-1.5">
+            <span className="mt-1 font-mono text-[11px] text-muted">LEVEL {lvl}</span>
+            {(topics ?? [])
+              .filter((t) => t.level === lvl)
+              .map((t) => {
+                const chip = topicChip(t, derived.seal.get(t.id) ?? EMPTY_SEAL);
+                const href = t.status === "locked" || !t.cardSeen ? `/topic/${t.id}` : `/drill?t=${t.id}`;
+                return (
+                  <Link key={t.id} href={href} className="flex min-h-11 items-center justify-between gap-3 rounded-[10px] bg-card px-3 py-2.5 text-sm">
+                    <span className={t.status === "locked" ? "text-muted" : ""}>{t.title}</span>
+                    <Chip tone={chip.tone}>{chip.text}</Chip>
+                  </Link>
+                );
+              })}
+          </div>
+        ))}
+      </section>
     </div>
+  );
+}
+
+function UnlockPanel({ topics, onDone }: { topics: Topic[]; onDone: () => void }) {
+  return (
+    <Card className="flex flex-col gap-2">
+      <p className="m-0 text-[13px] text-soft">
+        Which topic did class cover today? Unlocking it adds its grammar to every drill. (Adding a topic from your notes and photos comes in Phase 2.)
+      </p>
+      {topics.length === 0 && <p className="m-0 text-[13px] text-muted">Every topic is already unlocked.</p>}
+      {topics.map((t) => (
+        <Button
+          key={t.id}
+          variant="secondary"
+          className="justify-between text-left"
+          onClick={async () => {
+            await db.topics.update(t.id, { status: "active" });
+            onDone();
+          }}
+        >
+          <span>{t.title}</span>
+          <span className="font-mono text-[11px] text-accent">UNLOCK</span>
+        </Button>
+      ))}
+    </Card>
   );
 }
