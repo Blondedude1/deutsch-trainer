@@ -29,8 +29,9 @@ export default function Home() {
   const qaTags = top.map((l) => l.tag);
 
   return (
-    <div className="flex flex-col gap-4 px-5 pt-5">
-      <header className="flex items-center justify-between">
+    <div className="flex flex-col gap-4 px-5 pt-5 md:pt-8 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:items-start lg:gap-10">
+      <div className="flex flex-col gap-4">
+      <header className="flex items-center justify-between md:hidden">
         <span className="font-mono text-xs tracking-[2px] text-muted">DEUTSCH TRAINER</span>
       </header>
 
@@ -74,6 +75,7 @@ export default function Home() {
           </Link>
         ))}
       </section>
+      </div>
 
       <section className="flex flex-col gap-2">
         <div className="flex items-center justify-between gap-2">
@@ -91,15 +93,15 @@ export default function Home() {
         {adding && <UnlockPanel topics={(topics ?? []).filter((t) => t.status === "locked")} onDone={() => setAdding(false)} />}
 
         {[1, 2].map((lvl) => (
-          <div key={lvl} className="flex flex-col gap-1.5">
-            <span className="mt-1 font-mono text-[11px] text-muted">LEVEL {lvl}</span>
+          <div key={lvl} className="flex flex-col gap-1.5 md:grid md:grid-cols-2 md:gap-2 lg:flex">
+            <span className="mt-1 font-mono text-[11px] text-muted md:col-span-2">LEVEL {lvl}</span>
             {(topics ?? [])
               .filter((t) => t.level === lvl)
               .map((t) => {
                 const chip = topicChip(t, derived.seal.get(t.id) ?? EMPTY_SEAL);
                 const href = t.status === "locked" || !t.cardSeen ? `/topic/${t.id}` : `/drill?t=${t.id}`;
                 return (
-                  <Link key={t.id} href={href} className="flex min-h-11 items-center justify-between gap-3 rounded-[10px] bg-card px-3 py-2.5 text-sm">
+                  <Link key={t.id} href={href} className="flex min-h-11 items-center justify-between gap-3 rounded-[10px] border border-border bg-card px-3 py-2.5 text-sm">
                     <span className={t.status === "locked" ? "text-muted" : ""}>{t.title}</span>
                     <Chip tone={chip.tone}>{chip.text}</Chip>
                   </Link>

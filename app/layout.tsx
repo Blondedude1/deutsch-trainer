@@ -11,12 +11,12 @@ export const metadata: Metadata = {
   title: "Deutsch Trainer",
   description: "German drills, strict grading, mistake tracking.",
   applicationName: "Deutsch Trainer",
-  appleWebApp: { capable: true, title: "Deutsch", statusBarStyle: "black-translucent" },
+  appleWebApp: { capable: true, title: "Deutsch", statusBarStyle: "default" },
   icons: { icon: "/icons/icon-192.png", apple: "/icons/apple-touch-icon.png" },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0d1117",
+  themeColor: "#f6f6f3",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",

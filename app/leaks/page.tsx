@@ -29,7 +29,7 @@ export default function LeaksPage() {
   const max = Math.max(1, ...ranking.map((r) => r.count));
 
   return (
-    <div className="flex flex-col gap-4 px-5 pt-5">
+    <div className="flex flex-col gap-4 px-5 pt-5 md:pt-8">
       <div className="flex flex-col gap-1">
         <h1 className="m-0 font-head text-2xl font-bold">Leaks</h1>
         <p className="m-0 text-sm text-muted">Mistake patterns, last 7 days.</p>
@@ -41,7 +41,7 @@ export default function LeaksPage() {
         </Card>
       )}
 
-      <ul className="m-0 flex list-none flex-col gap-2 p-0">
+      <ul className="m-0 grid list-none gap-2 p-0 md:grid-cols-2">
         {ranking.map((r) => (
           <li key={r.tag}>
             <Card className="flex flex-col gap-2">
@@ -67,9 +67,9 @@ export default function LeaksPage() {
       {recent.length > 0 && (
         <section className="flex flex-col gap-2">
           <Label>Recent ✗ → ✓</Label>
-          <ul className="m-0 flex list-none flex-col gap-2 p-0">
+          <ul className="m-0 grid list-none gap-2 p-0 md:grid-cols-2">
             {recent.map((a) => (
-              <li key={a.id} className="flex flex-col gap-1 rounded-[10px] bg-card px-3 py-2.5 text-[13px]">
+              <li key={a.id} className="flex flex-col gap-1 rounded-[10px] border border-border bg-card px-3 py-2.5 text-[13px]">
                 <span className="text-error line-through decoration-error/60">{a.answer}</span>
                 <span className="text-success">{a.grade!.corrected}</span>
                 <span className="text-muted">{a.grade!.fixes.map((f) => f.reasonEn).join(" · ")}</span>

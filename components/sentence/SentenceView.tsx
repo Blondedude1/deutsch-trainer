@@ -17,7 +17,7 @@ function roleStyle(t: Token): { className: string; style?: React.CSSProperties }
     case "connector":
       return { className: "rounded-[5px] bg-conn-bg px-1.5 font-semibold text-conn" };
     case "finalVerb":
-      return { className: "rounded-[5px] border-b-2 border-warn bg-final-bg px-1.5 font-bold text-final" };
+      return { className: "rounded-[5px] border-b-2 border-final-line bg-final-bg px-1.5 font-bold text-final" };
     case "noun":
       return {
         className: "px-0.5",

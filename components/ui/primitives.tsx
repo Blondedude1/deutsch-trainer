@@ -24,11 +24,11 @@ export function StatTile({ label, value }: { label: string; value: string }) {
 
 export type ChipTone = "success" | "accent" | "muted" | "warn" | "error";
 const TONES: Record<ChipTone, string> = {
-  success: "text-success border-[#2F6B44]",
+  success: "text-success border-success-line",
   accent: "text-accent border-accent-line",
   muted: "text-muted border-border",
-  warn: "text-warn border-[#6B4A12]",
-  error: "text-error border-[#7F1D1D]",
+  warn: "text-warn border-warn-line",
+  error: "text-error border-error-line",
 };
 
 export function Chip({ children, tone = "muted", small = false }: { children: ReactNode; tone?: ChipTone; small?: boolean }) {

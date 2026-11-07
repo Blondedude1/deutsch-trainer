@@ -223,7 +223,7 @@ export function DrillRunner({ target }: { target: DrillTarget }) {
   const progress = session ? `${levelText}${Math.min(session.index + 1, session.ids.length)}/${session.ids.length}` : "";
 
   return (
-    <div className="flex min-h-dvh flex-col gap-3 px-5 pt-3" style={{ paddingBottom: "calc(16px + env(safe-area-inset-bottom))" }}>
+    <div className="mx-auto flex min-h-dvh w-full max-w-[480px] flex-col gap-3 px-5 pt-3 md:max-w-2xl md:pt-8" style={{ paddingBottom: "calc(16px + env(safe-area-inset-bottom))" }}>
       <header className="flex items-center justify-between gap-3">
         <BackLink />
         <div className="flex min-w-0 items-center gap-3">

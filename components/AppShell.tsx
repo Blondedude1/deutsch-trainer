@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { syncSeedTopics } from "@/lib/db";
 import { useActiveTimeTracker } from "@/lib/logic/activeTime";
-import { BottomNav } from "./ui/BottomNav";
+import { BottomNav, TopNav } from "./ui/BottomNav";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const path = usePathname();
@@ -21,10 +21,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div
-      className="mx-auto min-h-dvh w-full max-w-[480px]"
+      className="min-h-dvh w-full"
       style={{ paddingTop: "env(safe-area-inset-top)", paddingLeft: "env(safe-area-inset-left)", paddingRight: "env(safe-area-inset-right)" }}
     >
-      <main className={showNav ? "pb-nav" : ""}>{children}</main>
+      {showNav && <TopNav path={path} />}
+      <main className={`mx-auto w-full max-w-[480px] md:max-w-5xl md:px-3 ${showNav ? "pb-nav" : ""}`}>{children}</main>
       {showNav && <BottomNav path={path} />}
     </div>
   );

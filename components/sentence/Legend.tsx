@@ -15,7 +15,7 @@ export function LegendBody() {
         <span className="rounded bg-conn-bg px-1.5 font-semibold text-conn">weil</span> connector
       </span>
       <span>
-        <span className="rounded border-b-2 border-warn bg-final-bg px-1.5 font-bold text-final">bin</span> end / NS verb
+        <span className="rounded border-b-2 border-final-line bg-final-bg px-1.5 font-bold text-final">bin</span> end / NS verb
       </span>
       <span>
         <span className="rounded border border-dashed border-adv-line px-1.5 text-text">heute</span> TE · KA · MO · LO

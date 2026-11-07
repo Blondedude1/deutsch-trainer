@@ -28,7 +28,7 @@ export default function StatsPage() {
   }, [attempts, active]);
 
   return (
-    <div className="flex flex-col gap-4 px-5 pt-5">
+    <div className="flex flex-col gap-4 px-5 pt-5 md:max-w-2xl md:pt-8">
       <div className="flex flex-col gap-1">
         <h1 className="m-0 font-head text-2xl font-bold">Stats</h1>
         <p className="m-0 text-sm text-muted">Charts come in Phase 3.</p>
@@ -60,7 +60,7 @@ export default function StatsPage() {
             const info = s.seal.get(t.id) ?? EMPTY_SEAL;
             const chip = topicChip(t, info);
             return (
-              <div key={t.id} className="flex min-h-11 items-center justify-between gap-3 rounded-[10px] bg-card px-3 py-2 text-sm">
+              <div key={t.id} className="flex min-h-11 items-center justify-between gap-3 rounded-[10px] border border-border bg-card px-3 py-2 text-sm">
                 <span>{t.title}</span>
                 <Chip tone={chip.tone}>{chip.text}</Chip>
               </div>

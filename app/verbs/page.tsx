@@ -2,7 +2,7 @@ import { Card } from "@/components/ui/primitives";
 
 export default function VerbsPage() {
   return (
-    <div className="flex flex-col gap-4 px-5 pt-5">
+    <div className="flex flex-col gap-4 px-5 pt-5 md:max-w-2xl md:pt-8">
       <div className="flex flex-col gap-1">
         <h1 className="m-0 font-head text-2xl font-bold">Verbs</h1>
         <p className="m-0 text-sm text-muted">Irregular verb cards with spaced repetition.</p>

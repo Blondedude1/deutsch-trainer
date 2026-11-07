@@ -44,7 +44,7 @@ export default function TopicPage() {
   };
 
   return (
-    <div className="flex flex-col gap-3 px-5 pt-3">
+    <div className="flex flex-col gap-3 px-5 pt-3 md:pt-6">
       <header className="flex items-center justify-between">
         <BackLink />
         <Chip tone={chip.tone}>{chip.text}</Chip>
@@ -55,6 +55,7 @@ export default function TopicPage() {
         <p className="m-0 text-[13px] text-muted">{topic.mongolianTitle}</p>
       </div>
 
+      <div className="grid gap-3 md:grid-cols-2">
       <Card className="flex flex-col gap-2">
         <Label color="var(--color-success)">Fixed · never changes</Label>
         <ul className="m-0 flex list-none flex-col gap-1.5 p-0 text-[13px] leading-snug text-soft">
@@ -77,9 +78,12 @@ export default function TopicPage() {
         </ul>
       </Card>
 
+      </div>
+
+      <div className="grid gap-3 md:grid-cols-2 md:gap-6">
       <section className="flex flex-col gap-1.5">
         <Label>Blueprints</Label>
-        <div className="flex flex-col gap-1 rounded-[10px] bg-card px-3 py-2.5">
+        <div className="flex flex-col gap-1 rounded-[10px] border border-border bg-card px-3 py-2.5">
           {topic.card.blueprints.map((b, i) => (
             <Blueprint key={i} text={b} />
           ))}
@@ -96,6 +100,8 @@ export default function TopicPage() {
           ))}
         </ul>
       </section>
+
+      </div>
 
       <section className="flex flex-col gap-1.5">
         <Label>Your leaks here</Label>
@@ -120,7 +126,7 @@ export default function TopicPage() {
           <Button onClick={() => db.topics.update(topic.id, { status: "active" })}>Unlock this topic</Button>
         </div>
       ) : (
-        <section className="flex flex-col gap-2 pt-1">
+        <section className="flex flex-col gap-2 pt-1 md:max-w-md">
           <Label>Drill level</Label>
           <div className="grid grid-cols-5 gap-1.5" role="group" aria-label="Choose a level">
             {[1, 2, 3, 4, 5].map((l) => (
