@@ -2,8 +2,8 @@ import Link from "next/link";
 
 const ITEMS = [
   { href: "/", label: "Train", match: (p: string) => p === "/" || p.startsWith("/topic") },
+  { href: "/grammar", label: "Grammar", match: (p: string) => p.startsWith("/grammar") },
   { href: "/leaks", label: "Leaks", match: (p: string) => p.startsWith("/leaks") },
-  { href: "/verbs", label: "Verbs", match: (p: string) => p.startsWith("/verbs") },
   { href: "/stats", label: "Stats", match: (p: string) => p.startsWith("/stats") },
 ];
 
