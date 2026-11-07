@@ -1,6 +1,6 @@
 // Offline shell: static assets cache-first, pages network-first with cache fallback.
 // API calls are never cached (grading must be live).
-const CACHE = "dt-v1";
+const CACHE = "dt-v2"; // bump to purge every old cache
 
 self.addEventListener("install", () => self.skipWaiting());
 self.addEventListener("activate", (e) => {
@@ -21,8 +21,11 @@ self.addEventListener("fetch", (e) => {
         (hit) =>
           hit ||
           fetch(req).then((res) => {
-            const copy = res.clone();
-            caches.open(CACHE).then((c) => c.put(req, copy));
+            // never cache a failed download (a cached 404 breaks the app until cleared)
+            if (res.ok) {
+              const copy = res.clone();
+              caches.open(CACHE).then((c) => c.put(req, copy));
+            }
             return res;
           }),
       ),
