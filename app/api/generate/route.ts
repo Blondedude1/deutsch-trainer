@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { AiError, callJson } from "@/lib/anthropic";
+import { GENERATE_MODEL } from "@/lib/config";
 import { GENERATE_SYSTEM, generateUserPrompt } from "@/lib/prompts/generate";
 import { GenerateOutputSchema, GenerateRequestSchema } from "@/lib/schemas";
 import { SEED_TOPICS, TOPIC_BY_ID } from "@/lib/seed/topics";
@@ -26,6 +27,7 @@ export async function POST(req: Request) {
       content: generateUserPrompt({ mode: r.mode, topic, level: r.level, tags: r.tags, count: r.count, avoid: r.avoid, known }),
       effort: "medium",
       maxTokens: 32000,
+      model: GENERATE_MODEL,
       userKey: req.headers.get("x-anthropic-key"),
     });
     // Keep only items that point at a known topic and have a usable answer.

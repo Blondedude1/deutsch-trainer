@@ -306,7 +306,7 @@ export function DrillRunner({ target }: { target: DrillTarget }) {
             </Card>
           )}
 
-          {grade && <FeedbackCard grade={grade} answer={lastAnswer} />}
+          {grade && <FeedbackCard grade={grade} answer={lastAnswer} reference={ex.solutionTokens} />}
 
           {peeked && (
             <Card className="flex flex-col gap-2">

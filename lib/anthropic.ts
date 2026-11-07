@@ -2,7 +2,7 @@ import "server-only";
 import Anthropic from "@anthropic-ai/sdk";
 import { betaZodOutputFormat } from "@anthropic-ai/sdk/helpers/beta/zod";
 import type { z } from "zod";
-import { MODEL } from "./config";
+import { GENERATE_MODEL, GRADE_MODEL } from "./config";
 
 export const NO_KEY = "NO_KEY";
 
@@ -38,6 +38,7 @@ export async function callJson<S extends z.ZodType>(opts: {
   effort: Effort;
   maxTokens: number;
   userKey: string | null;
+  model: typeof GRADE_MODEL | typeof GENERATE_MODEL;
 }): Promise<z.infer<S>> {
   const anthropic = getClient(opts.userKey);
   let lastError = "unknown error";
@@ -45,11 +46,12 @@ export async function callJson<S extends z.ZodType>(opts: {
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
       // Streamed: large max_tokens values are refused for non-streaming requests.
+      // Server-side refusal fallback exists for Sonnet, not for Haiku.
+      const fallback = opts.model === GENERATE_MODEL ? { betas: ["server-side-fallback-2026-07-01"], fallbacks: "default" as const } : {};
       const stream = anthropic.beta.messages.stream({
-        model: MODEL,
+        model: opts.model,
         max_tokens: opts.maxTokens,
-        betas: ["server-side-fallback-2026-07-01"],
-        fallbacks: "default",
+        ...fallback,
         // The system prompt is long and identical across calls: cache it.
         system: [{ type: "text", text: opts.system, cache_control: { type: "ephemeral" } }],
         output_config: { effort: opts.effort, format: betaZodOutputFormat(opts.schema) },

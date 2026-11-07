@@ -14,15 +14,11 @@ const cases: Case[] = [
     req: { ...base, topicId: "t24-reason", promptMn: "Би ядарсан учраас одоо гэр лүүгээ явна.", answer: "Ich gehe jetzt nach Hause, weil ich müde bin.", solution: "Ich gehe jetzt nach Hause, weil ich müde bin.", userAnswer: "Ich gehe jetzt nach Hause, weil ich mude." },
     check: (g) => {
       const tags = g.fixes.map((f) => f.tag);
-      const role = (w: string) => g.tokens.find((t) => t.text.replace(/[.,!?]/g, "") === w)?.role;
       return [
         ["verdict wrong", g.verdict === "wrong"],
         ["tag umlaut", tags.includes("umlaut")],
         ["tag hidden_verb", tags.includes("hidden_verb")],
         ["corrected has 'müde bin'", g.corrected.includes("müde bin")],
-        ["gehe = verb2", role("gehe") === "verb2"],
-        ["weil = connector", role("weil") === "connector"],
-        ["bin = finalVerb", role("bin") === "finalVerb"],
       ];
     },
   },

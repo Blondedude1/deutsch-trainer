@@ -1,6 +1,9 @@
 // Central knobs. Change the model or thresholds here, nowhere else.
 
-export const MODEL = "claude-sonnet-5-5";
+/** Grading: compares against the textbook answer, so the small model is enough (~$2/month at 100/day). */
+export const GRADE_MODEL = "claude-haiku-5-5";
+/** Writing new items (optional, only with a key). */
+export const GENERATE_MODEL = "claude-sonnet-5-5";
 
 export const BATCH_SIZE = 20; // items per generated batch / drill session
 export const QA_SIZE = 10; // Daily QA items

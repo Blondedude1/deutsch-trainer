@@ -60,14 +60,15 @@ export const FixSchema = z.object({
 });
 export type Fix = z.infer<typeof FixSchema>;
 
+/** What the grader model returns (kept small: the colour-coded answer comes from the card). */
 export const GradeOutputSchema = z.object({
   corrected: z.string(),
   fixes: z.array(FixSchema),
-  tokens: z.array(TokenSchema),
 });
 
 export type Verdict = "correct" | "minor" | "wrong";
-export type Grade = z.infer<typeof GradeOutputSchema> & { verdict: Verdict };
+/** tokens: colour-coded sentence when known (fast path); empty when the model graded. */
+export type Grade = z.infer<typeof GradeOutputSchema> & { verdict: Verdict; tokens: Token[] };
 
 /** Request bodies. */
 export const GenerateRequestSchema = z.object({

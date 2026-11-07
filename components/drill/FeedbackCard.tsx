@@ -1,10 +1,10 @@
-import type { Grade } from "@/lib/schemas";
+import type { Grade, Token } from "@/lib/schemas";
 import { TAG_INFO, MINOR_TAGS } from "@/lib/tags";
 import { AnswerMarkup } from "../sentence/AnswerMarkup";
 import { SentenceView } from "../sentence/SentenceView";
 import { Card, Chip } from "../ui/primitives";
 
-export function FeedbackCard({ grade, answer }: { grade: Grade; answer: string }) {
+export function FeedbackCard({ grade, answer, reference }: { grade: Grade; answer: string; reference?: Token[] }) {
   const n = grade.fixes.length;
   const head =
     grade.verdict === "correct"
@@ -38,6 +38,13 @@ export function FeedbackCard({ grade, answer }: { grade: Grade; answer: string }
         {n > 0 && <span className="label">Corrected</span>}
         {grade.tokens.length ? <SentenceView tokens={grade.tokens} /> : <p className="m-0 text-[15px]">{grade.corrected}</p>}
       </div>
+
+      {!grade.tokens.length && reference && reference.length > 0 && (
+        <div className="flex flex-col gap-1">
+          <span className="label">Textbook answer</span>
+          <SentenceView tokens={reference} />
+        </div>
+      )}
 
       {n > 0 && (
         <ul className="m-0 flex list-none flex-col gap-1.5 p-0 text-[13px] leading-snug text-soft">
