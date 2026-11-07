@@ -8,7 +8,7 @@ Next.js (App Router) + TypeScript + Tailwind. All data stays on the device in In
 
 ```bash
 npm install
-cp .env.example .env.local   # then put your real key in .env.local
+cp .env.example .env.local   # optional: or paste the key in the app (Stats → API key)
 npm run dev                  # http://localhost:3000
 ```
 

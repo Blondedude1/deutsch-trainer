@@ -26,6 +26,7 @@ export async function POST(req: Request) {
       content: generateUserPrompt({ mode: r.mode, topic, level: r.level, tags: r.tags, count: r.count, avoid: r.avoid, known }),
       effort: "medium",
       maxTokens: 32000,
+      userKey: req.headers.get("x-anthropic-key"),
     });
     // Keep only items that point at a known topic and have a usable answer.
     const items = out.items

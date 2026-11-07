@@ -49,10 +49,21 @@ export async function clearSession(pool: string) {
   await db.meta.delete(sessionKey(pool));
 }
 
+/** Thrown when no API key is available; the UI shows the key box. */
+export class NoKeyError extends Error {
+  constructor() {
+    super("Add your Anthropic API key to start.");
+  }
+}
+
 async function postJson<T>(url: string, body: unknown): Promise<T> {
   if (typeof navigator !== "undefined" && !navigator.onLine) throw new Error("You are offline. This step needs the internet.");
-  const res = await fetch(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
+  const key = await getMeta<string>("apiKey", "");
+  const headers: Record<string, string> = { "content-type": "application/json" };
+  if (key) headers["x-anthropic-key"] = key;
+  const res = await fetch(url, { method: "POST", headers, body: JSON.stringify(body) });
   const data = await res.json().catch(() => ({}));
+  if (data.error === "NO_KEY") throw new NoKeyError();
   if (!res.ok) throw new Error(data.error ?? `Request failed (${res.status}).`);
   return data as T;
 }

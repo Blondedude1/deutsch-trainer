@@ -20,6 +20,7 @@ export async function POST(req: Request) {
       content: gradeUserPrompt(r, TOPIC_BY_ID[r.topicId] ?? null),
       effort: "high",
       maxTokens: 16000,
+      userKey: req.headers.get("x-anthropic-key"),
     });
     // Drop no-op "fixes" the model sometimes emits (wrong === right).
     const fixes = out.fixes.filter((f) => f.wrong.trim() !== f.right.trim());

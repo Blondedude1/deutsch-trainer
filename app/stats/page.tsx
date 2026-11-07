@@ -1,6 +1,8 @@
 "use client";
 
 import { useMemo } from "react";
+import { ApiKeyBox } from "@/components/ApiKeyBox";
+import { SelfTest } from "@/components/SelfTest";
 import { Card, Chip, Label, StatTile } from "@/components/ui/primitives";
 import { EMPTY_SEAL, sealByTopic, topicChip, useAllActive, useAttempts, useTopics } from "@/lib/hooks";
 import { daysAgo, formatDuration } from "@/lib/logic/core";
@@ -43,6 +45,12 @@ export default function StatsPage() {
         <StatTile label="Peeks · 7 days" value={String(s.peeks)} />
         <StatTile label="Answers" value={String(s.graded)} />
       </div>
+
+      <Card className="flex flex-col gap-2">
+        <Label>API key</Label>
+        <ApiKeyBox />
+        <SelfTest />
+      </Card>
 
       <section className="flex flex-col gap-1.5">
         <Label>Topics</Label>

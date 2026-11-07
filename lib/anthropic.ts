@@ -4,11 +4,16 @@ import { betaZodOutputFormat } from "@anthropic-ai/sdk/helpers/beta/zod";
 import type { z } from "zod";
 import { MODEL } from "./config";
 
-let client: Anthropic | null = null;
-function getClient() {
-  if (!process.env.ANTHROPIC_API_KEY) throw new AiError("ANTHROPIC_API_KEY is not set on the server.", 500);
-  client ??= new Anthropic();
-  return client;
+export const NO_KEY = "NO_KEY";
+
+/**
+ * Key source: the server env var if set, otherwise the key the learner saved in the app
+ * (sent per request in the x-anthropic-key header, never stored on the server).
+ */
+function getClient(userKey: string | null) {
+  const apiKey = process.env.ANTHROPIC_API_KEY || userKey?.trim();
+  if (!apiKey) throw new AiError(NO_KEY, 401);
+  return new Anthropic({ apiKey });
 }
 
 export class AiError extends Error {
@@ -32,13 +37,15 @@ export async function callJson<S extends z.ZodType>(opts: {
   content: Anthropic.Beta.BetaContentBlockParam[] | string;
   effort: Effort;
   maxTokens: number;
+  userKey: string | null;
 }): Promise<z.infer<S>> {
-  const anthropic = getClient();
+  const anthropic = getClient(opts.userKey);
   let lastError = "unknown error";
 
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
-      const res = await anthropic.beta.messages.parse({
+      // Streamed: large max_tokens values are refused for non-streaming requests.
+      const stream = anthropic.beta.messages.stream({
         model: MODEL,
         max_tokens: opts.maxTokens,
         betas: ["server-side-fallback-2026-07-01"],
@@ -48,6 +55,7 @@ export async function callJson<S extends z.ZodType>(opts: {
         output_config: { effort: opts.effort, format: betaZodOutputFormat(opts.schema) },
         messages: [{ role: "user", content: opts.content }],
       });
+      const res = await stream.finalMessage();
 
       if (res.stop_reason === "refusal") throw new AiError("The model declined this request.", 422);
       if (res.stop_reason === "max_tokens") {
@@ -58,7 +66,7 @@ export async function callJson<S extends z.ZodType>(opts: {
       lastError = "response did not match the schema";
     } catch (err) {
       if (err instanceof AiError) throw err;
-      if (err instanceof Anthropic.AuthenticationError) throw new AiError("Invalid ANTHROPIC_API_KEY.", 500);
+      if (err instanceof Anthropic.AuthenticationError) throw new AiError("That API key was rejected. Check it in Stats → API key.", 401);
       if (err instanceof Anthropic.RateLimitError) throw new AiError("Rate limited. Wait a minute and try again.", 429);
       if (err instanceof Anthropic.BadRequestError) throw new AiError(`Bad request: ${err.message}`, 500);
       lastError = err instanceof Error ? err.message : String(err);

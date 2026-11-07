@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { LEVEL_UP_RATE } from "@/lib/config";
 import { db, setMeta, type Exercise, type Topic } from "@/lib/db";
-import { clearSession, gradeAnswer, saveSession, startSession, type DrillSpec, type Session } from "@/lib/drill";
+import { clearSession, gradeAnswer, NoKeyError, saveSession, startSession, type DrillSpec, type Session } from "@/lib/drill";
+import { ApiKeyBox } from "../ApiKeyBox";
 import { dayKey, isPass, uniqueTags } from "@/lib/logic/core";
 import { markActivity } from "@/lib/logic/activeTime";
 import type { Grade } from "@/lib/schemas";
@@ -25,6 +26,7 @@ export function DrillRunner({ target }: { target: DrillTarget }) {
   const router = useRouter();
   const [phase, setPhase] = useState<Phase>("loading");
   const [error, setError] = useState("");
+  const [noKey, setNoKey] = useState(false);
   const [topic, setTopic] = useState<Topic | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [ex, setEx] = useState<Exercise | null>(null);
@@ -78,6 +80,7 @@ export function DrillRunner({ target }: { target: DrillTarget }) {
     async (opts: { fresh?: boolean; level?: number } = {}) => {
       setPhase("loading");
       setError("");
+      setNoKey(false);
       try {
         let spec: DrillSpec;
         if (target.kind === "topic") {
@@ -103,6 +106,7 @@ export function DrillRunner({ target }: { target: DrillTarget }) {
         setSession(s);
         await showIndex(s);
       } catch (e) {
+        setNoKey(e instanceof NoKeyError);
         setError(e instanceof Error ? e.message : String(e));
         setPhase("error");
       }
@@ -145,6 +149,11 @@ export function DrillRunner({ target }: { target: DrillTarget }) {
       setTries((n) => n + 1);
     } catch (e) {
       // Never fake a grade.
+      if (e instanceof NoKeyError) {
+        setNoKey(true);
+        setCheckError(e.message);
+        return;
+      }
       setCheckError(e instanceof Error ? `Couldn't grade, try again. ${e.message}` : "Couldn't grade, try again.");
     } finally {
       setChecking(false);
@@ -236,8 +245,8 @@ export function DrillRunner({ target }: { target: DrillTarget }) {
 
       {phase === "error" && (
         <Card className="flex flex-col gap-3">
-          <p className="m-0 text-sm text-error">{error}</p>
-          <Button onClick={() => begin()}>Try again</Button>
+          <p className={`m-0 text-sm ${noKey ? "text-soft" : "text-error"}`}>{error}</p>
+          {noKey ? <ApiKeyBox onSaved={() => begin()} /> : <Button onClick={() => begin()}>Try again</Button>}
         </Card>
       )}
 
@@ -286,6 +295,16 @@ export function DrillRunner({ target }: { target: DrillTarget }) {
           </div>
 
           {checkError && <p className="m-0 text-sm text-error" role="alert">{checkError}</p>}
+          {noKey && phase === "item" && (
+            <Card>
+              <ApiKeyBox
+                onSaved={() => {
+                  setNoKey(false);
+                  setCheckError("");
+                }}
+              />
+            </Card>
+          )}
 
           {grade && <FeedbackCard grade={grade} answer={lastAnswer} />}
 
