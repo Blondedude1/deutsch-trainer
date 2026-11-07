@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Deutsch Trainer
 
-## Getting Started
+A personal German drill app for one learner. Mongolian prompt → German answer → strict grading with a one-line reason for each fix. It tracks mistake patterns and progress.
 
-First, run the development server:
+Next.js (App Router) + TypeScript + Tailwind. All data stays on the device in IndexedDB (Dexie). AI calls go through server routes only.
+
+## Run locally
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env.local   # then put your real key in .env.local
+npm run dev                  # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Grading acceptance checks
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+With the app running (locally or deployed):
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+node scripts/acceptance.mjs http://localhost:3000
+```
 
-## Learn More
+## Where things live
 
-To learn more about Next.js, take a look at the following resources:
+| What | Where |
+|---|---|
+| Model id, thresholds | `lib/config.ts` |
+| AI prompts (tune here) | `lib/prompts/*.ts` |
+| Topic cards (35 topics) | `lib/seed/topics.ts` |
+| Mistake tags | `lib/tags.ts` |
+| Output schemas (zod) | `lib/schemas.ts` |
+| Streak, sealing, leaks | `lib/logic/stats.ts` |
+| Active-time tracking | `lib/logic/activeTime.ts` |
+| Local database | `lib/db.ts` |
+| API routes | `app/api/generate`, `app/api/grade` |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Rules worth knowing
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Counted** = the first, unpeeked attempt on an item. Only counted attempts move the streak and sealing. A peek resets the streak.
+- **minor** (only capitalization/comma fixes) counts as a pass. Umlaut mistakes count as wrong.
+- **Sealed** = 3 separate days with at least 10 counted level-3+ items at 90 % or better.
+- **Locked** topics are ones class hasn't covered yet. Unlock them from the topic card or with "+ Add today's class topic". Drills only use grammar from unlocked topics.
+- **Bad item? Remove it** deletes a broken generated item and every attempt on it.
