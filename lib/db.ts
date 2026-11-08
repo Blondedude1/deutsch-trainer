@@ -129,7 +129,7 @@ export async function setMeta(key: string, value: unknown) {
 /** Built-in cards in the order new ones are introduced: rule, verb, pair, rule, verb, pair… */
 function seedCards(): Omit<StudyCard, "fsrs" | "due" | "state" | "createdAt">[] {
   const lists = [
-    RULES.map((r) => ({ id: `rule:${r.id}`, deck: "rule" as const, content: { kind: "rule" as const, tree: r.tree, front: r.front, back: r.back, example: r.example } })),
+    RULES.map((r) => ({ id: `rule:${r.id}`, deck: "rule" as const, content: { kind: "rule" as const, tree: r.tree, front: r.front, back: r.back, example: r.example, gloss: r.gloss } })),
     VERBS.map((v) => ({ id: `verb:${v.inf}`, deck: "verb" as const, content: { kind: "verb" as const, ...v } })),
     PAIRS.map((p) => ({ id: `pair:${p.id}`, deck: "pair" as const, content: { kind: "pair" as const, mn: p.mn, de: p.de, hint: p.hint, accept: p.accept } })),
   ];

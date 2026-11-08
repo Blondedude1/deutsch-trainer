@@ -428,6 +428,15 @@ function Back({ card, grade, answer, peeked }: { card: StudyCard; grade: Grade |
         <p className="m-0 font-mono text-sm text-soft">
           <Rich text={c.example} />
         </p>
+        {c.gloss && (
+          <ul className="m-0 flex list-none flex-wrap gap-1.5 p-0">
+            {c.gloss.split(" · ").map((g) => (
+              <li key={g} className="rounded-md bg-divider px-2 py-1 text-[12px] text-soft">
+                {g}
+              </li>
+            ))}
+          </ul>
+        )}
       </Card>
     );
   }

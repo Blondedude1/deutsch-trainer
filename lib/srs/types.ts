@@ -29,7 +29,7 @@ export type CardContent =
   | { kind: "noun"; mn: string; de: string; plural: string; gender: "der" | "die" | "das" }
   | { kind: "verb"; inf: string; mn: string; praet: string; partizip: string; helper: "haben" | "sein"; note?: string }
   | { kind: "pair"; mn: string; de: string; hint?: string; accept?: string[] }
-  | { kind: "rule"; tree: TreeId; front: string; back: string; example: string };
+  | { kind: "rule"; tree: TreeId; front: string; back: string; example: string; gloss?: string };
 
 export type StudyCard = {
   id: string;

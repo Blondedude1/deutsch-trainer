@@ -3,7 +3,7 @@
 
 export type VerbSeed = { inf: string; mn: string; praet: string; partizip: string; helper: "haben" | "sein"; note?: string };
 export type PairSeed = { id: string; mn: string; de: string; hint?: string; accept?: string[] };
-export type RuleSeed = { id: string; tree: TreeId; front: string; back: string; example: string };
+export type RuleSeed = { id: string; tree: TreeId; front: string; back: string; example: string; /** Key words of the example with Mongolian. */ gloss: string };
 
 export type TreeId = "verb_position" | "case" | "article" | "helper" | "adjective" | "hidden_verb";
 
@@ -101,37 +101,37 @@ export const PAIRS: PairSeed[] = [
 
 export const RULES: RuleSeed[] = [
   // Verb position
-  { id: "vp-question", tree: "verb_position", front: "Yes/no question or a command. Where does the conjugated verb go?", back: "First.", example: "**Kommst** du mit? · **Komm** her!" },
-  { id: "vp-ns", tree: "verb_position", front: "The clause starts with weil, dass, ob, wenn, als, obwohl, nachdem… Where does the conjugated verb go?", back: "Last (Nebensatz).", example: "…, weil ich müde **bin**." },
-  { id: "vp-slot0", tree: "verb_position", front: "The clause starts with und, aber, oder, denn or sondern. Where does the verb go?", back: "These words don't count (slot 0). Normal order: subject, then verb in slot 2.", example: "…, denn ich **bin** müde." },
-  { id: "vp-slot1", tree: "verb_position", front: "The sentence starts with deshalb, trotzdem, heute or any other word that isn't the subject. Where does the verb go?", back: "Slot 2: right after that first part. The subject comes behind the verb.", example: "Deshalb **gehe** ich nach Hause." },
-  { id: "vp-ns-first", tree: "verb_position", front: "A Nebensatz comes first. Where does the main clause verb go?", back: "Right after the comma: verb, verb.", example: "Weil ich müde bin, **gehe** ich nach Hause." },
-  { id: "vp-second-verb", tree: "verb_position", front: "Main clause with a modal verb or Perfekt. Where does the second verb go?", back: "To the very end.", example: "Ich kann gut **schwimmen**. Ich habe Deutsch **gelernt**." },
-  { id: "vp-ns-two-verbs", tree: "verb_position", front: "Nebensatz with a modal verb or Perfekt. In what order do the verbs stand at the end?", back: "Infinitiv / Partizip first, the conjugated verb last.", example: "…, weil ich arbeiten **muss**. …, dass er gekommen **ist**." },
+  { id: "vp-question", tree: "verb_position", front: "Yes/no question or a command. Where does the conjugated verb go?", back: "First.", example: "**Kommst** du mit? · **Komm** her!", gloss: "mitkommen = хамт явах · herkommen = наашаа ирэх" },
+  { id: "vp-ns", tree: "verb_position", front: "The clause starts with weil, dass, ob, wenn, als, obwohl, nachdem… Where does the conjugated verb go?", back: "Last (Nebensatz).", example: "…, weil ich müde **bin**.", gloss: "weil = учраас · müde = ядарсан" },
+  { id: "vp-slot0", tree: "verb_position", front: "The clause starts with und, aber, oder, denn or sondern. Where does the verb go?", back: "These words don't count (slot 0). Normal order: subject, then verb in slot 2.", example: "…, denn ich **bin** müde.", gloss: "denn = учир нь · müde = ядарсан" },
+  { id: "vp-slot1", tree: "verb_position", front: "The sentence starts with deshalb, trotzdem, heute or any other word that isn't the subject. Where does the verb go?", back: "Slot 2: right after that first part. The subject comes behind the verb.", example: "Deshalb **gehe** ich nach Hause.", gloss: "deshalb = тиймээс · nach Hause = гэр лүүгээ" },
+  { id: "vp-ns-first", tree: "verb_position", front: "A Nebensatz comes first. Where does the main clause verb go?", back: "Right after the comma: verb, verb.", example: "Weil ich müde bin, **gehe** ich nach Hause.", gloss: "weil = учраас · nach Hause = гэр лүүгээ" },
+  { id: "vp-second-verb", tree: "verb_position", front: "Main clause with a modal verb or Perfekt. Where does the second verb go?", back: "To the very end.", example: "Ich kann gut **schwimmen**. Ich habe Deutsch **gelernt**.", gloss: "schwimmen = сэлэх · lernen = сурах" },
+  { id: "vp-ns-two-verbs", tree: "verb_position", front: "Nebensatz with a modal verb or Perfekt. In what order do the verbs stand at the end?", back: "Infinitiv / Partizip first, the conjugated verb last.", example: "…, weil ich arbeiten **muss**. …, dass er gekommen **ist**.", gloss: "arbeiten = ажиллах · müssen = -х ёстой · dass = гэж" },
   // Case
-  { id: "case-dat-verbs", tree: "case", front: "The verb is helfen, danken, gefallen, gehören, glauben, gratulieren, schmecken or schaden. Which case?", back: "Dativ (өгөх-оршихын).", example: "Ich helfe **dem** Kind." },
-  { id: "case-dat-prep", tree: "case", front: "After aus, bei, mit, nach, seit, von, zu. Which case?", back: "Always Dativ.", example: "mit **dem** Bus · zu**r** Schule" },
-  { id: "case-akk-prep", tree: "case", front: "After durch, für, gegen, ohne, um, bis. Which case?", back: "Always Akkusativ (заахын).", example: "für **meinen** Bruder" },
-  { id: "case-wo", tree: "case", front: "in, an, auf, unter, über, vor, hinter, neben, zwischen. Answers Wo? (no movement). Which case?", back: "Dativ.", example: "Das Buch liegt auf **dem** Tisch." },
-  { id: "case-wohin", tree: "case", front: "in, an, auf, unter, über, vor, hinter, neben, zwischen. Answers Wohin? (movement to a place). Which case?", back: "Akkusativ.", example: "Ich lege das Buch auf **den** Tisch." },
-  { id: "case-gen-prep", tree: "case", front: "After wegen, trotz, während, statt, aufgrund. Which case?", back: "Genitiv (харьяалахын).", example: "wegen **des** Regens" },
-  { id: "case-giving", tree: "case", front: "Giving verb (geben, schenken, zeigen, bringen) with a person and a thing. Which comes first?", back: "Person (Dativ) first, thing (Akk) second. But a pronoun thing goes first.", example: "Ich gebe **dem Kind** das Buch. Ich gebe **es** dem Kind." },
-  { id: "case-haben", tree: "case", front: "Object after haben or es gibt. Which case?", back: "Always Akkusativ.", example: "Ich habe **einen** Bruder. Es gibt **einen** Park." },
+  { id: "case-dat-verbs", tree: "case", front: "The verb is helfen, danken, gefallen, gehören, glauben, gratulieren, schmecken or schaden. Which case?", back: "Dativ (өгөх-оршихын).", example: "Ich helfe **dem** Kind.", gloss: "helfen = туслах · das Kind = хүүхэд" },
+  { id: "case-dat-prep", tree: "case", front: "After aus, bei, mit, nach, seit, von, zu. Which case?", back: "Always Dativ.", example: "mit **dem** Bus · zu**r** Schule", gloss: "der Bus = автобус · die Schule = сургууль" },
+  { id: "case-akk-prep", tree: "case", front: "After durch, für, gegen, ohne, um, bis. Which case?", back: "Always Akkusativ (заахын).", example: "für **meinen** Bruder", gloss: "für = -ын төлөө, -д зориулж · der Bruder = ах / эрэгтэй дүү" },
+  { id: "case-wo", tree: "case", front: "in, an, auf, unter, über, vor, hinter, neben, zwischen. Answers Wo? (no movement). Which case?", back: "Dativ.", example: "Das Buch liegt auf **dem** Tisch.", gloss: "liegen = хэвтэх · der Tisch = ширээ · das Buch = ном" },
+  { id: "case-wohin", tree: "case", front: "in, an, auf, unter, über, vor, hinter, neben, zwischen. Answers Wohin? (movement to a place). Which case?", back: "Akkusativ.", example: "Ich lege das Buch auf **den** Tisch.", gloss: "legen = (хэвтүүлж) тавих · der Tisch = ширээ" },
+  { id: "case-gen-prep", tree: "case", front: "After wegen, trotz, während, statt, aufgrund. Which case?", back: "Genitiv (харьяалахын).", example: "wegen **des** Regens", gloss: "wegen = -ын улмаас · der Regen = бороо" },
+  { id: "case-giving", tree: "case", front: "Giving verb (geben, schenken, zeigen, bringen) with a person and a thing. Which comes first?", back: "Person (Dativ) first, thing (Akk) second. But a pronoun thing goes first.", example: "Ich gebe **dem Kind** das Buch. Ich gebe **es** dem Kind.", gloss: "geben = өгөх · das Kind = хүүхэд · das Buch = ном" },
+  { id: "case-haben", tree: "case", front: "Object after haben or es gibt. Which case?", back: "Always Akkusativ.", example: "Ich habe **einen** Bruder. Es gibt **einen** Park.", gloss: "der Bruder = ах / эрэгтэй дүү · es gibt = байдаг, бий · der Park = цэцэрлэгт хүрээлэн" },
   // Article
-  { id: "art-definite", tree: "article", front: "The Mongolian object has -ыг / -ийг / -г. Which article?", back: "der / die / das: a specific, known thing.", example: "Номыг уншлаа → Ich habe **das** Buch gelesen." },
-  { id: "art-indefinite", tree: "article", front: "The Mongolian object has no ending. Which article?", back: "ein- (a/one), or no article for plurals and uncountables.", example: "Ном уншлаа → Ich habe **ein** Buch gelesen." },
-  { id: "art-kein", tree: "article", front: "A noun is negated (машингүй, мөнгө байхгүй). kein or nicht?", back: "kein (with ein's endings).", example: "Ich habe **kein** Auto. Ich habe **keine** Zeit." },
+  { id: "art-definite", tree: "article", front: "The Mongolian object has -ыг / -ийг / -г. Which article?", back: "der / die / das: a specific, known thing.", example: "Номыг уншлаа → Ich habe **das** Buch gelesen.", gloss: "lesen = унших · das Buch = ном" },
+  { id: "art-indefinite", tree: "article", front: "The Mongolian object has no ending. Which article?", back: "ein- (a/one), or no article for plurals and uncountables.", example: "Ном уншлаа → Ich habe **ein** Buch gelesen.", gloss: "lesen = унших · ein Buch = нэг ном" },
+  { id: "art-kein", tree: "article", front: "A noun is negated (машингүй, мөнгө байхгүй). kein or nicht?", back: "kein (with ein's endings).", example: "Ich habe **kein** Auto. Ich habe **keine** Zeit.", gloss: "das Auto = машин · die Zeit = цаг, зав" },
   // Helper
-  { id: "helper-sein", tree: "helper", front: "Perfekt: a verb of movement (A → B) or change of state. haben or sein?", back: "sein.", example: "Ich **bin** gefahren. Er **ist** eingeschlafen." },
-  { id: "helper-sein-extra", tree: "helper", front: "Perfekt of sein, bleiben, passieren, werden. haben or sein?", back: "sein.", example: "Ich **bin** zu Hause geblieben." },
-  { id: "helper-haben", tree: "helper", front: "Perfekt: every other verb (incl. all reflexive verbs and verbs with an Akk object). haben or sein?", back: "haben.", example: "Ich **habe** mich gefreut. Ich **habe** das Auto gefahren." },
-  { id: "helper-no-ge", tree: "helper", front: "Partizip II: the verb starts with be-, ver-, er-, ent-, emp-, ge-, miss-, zer- or ends in -ieren. ge- or not?", back: "No ge-.", example: "verstanden · bekommen · studiert" },
+  { id: "helper-sein", tree: "helper", front: "Perfekt: a verb of movement (A → B) or change of state. haben or sein?", back: "sein.", example: "Ich **bin** gefahren. Er **ist** eingeschlafen.", gloss: "fahren = (унаагаар) явах · einschlafen = нойронд автах" },
+  { id: "helper-sein-extra", tree: "helper", front: "Perfekt of sein, bleiben, passieren, werden. haben or sein?", back: "sein.", example: "Ich **bin** zu Hause geblieben.", gloss: "bleiben = үлдэх · zu Hause = гэртээ" },
+  { id: "helper-haben", tree: "helper", front: "Perfekt: every other verb (incl. all reflexive verbs and verbs with an Akk object). haben or sein?", back: "haben.", example: "Ich **habe** mich gefreut. Ich **habe** das Auto gefahren.", gloss: "sich freuen = баярлах · das Auto fahren = машин жолоодох" },
+  { id: "helper-no-ge", tree: "helper", front: "Partizip II: the verb starts with be-, ver-, er-, ent-, emp-, ge-, miss-, zer- or ends in -ieren. ge- or not?", back: "No ge-.", example: "verstanden · bekommen · studiert", gloss: "verstehen = ойлгох · bekommen = хүлээн авах · studieren = (их сургуульд) суралцах" },
   // Adjective
-  { id: "adj-nom-der", tree: "adjective", front: "Adjective after der / die / das in Nominativ singular. Which ending?", back: "-e", example: "der neu**e** Lehrer" },
-  { id: "adj-en", tree: "adjective", front: "Adjective after an article in Dativ, in Genitiv, or in the plural. Which ending?", back: "-en", example: "mit dem neu**en** Lehrer · die neu**en** Bücher" },
-  { id: "adj-bare-ein", tree: "adjective", front: "Adjective after bare ein (no ending), with a der-noun or a das-noun. Which ending?", back: "-er (der-noun), -es (das-noun): the adjective shows the gender.", example: "ein neu**er** Tisch · ein neu**es** Buch" },
-  { id: "adj-no-article", tree: "adjective", front: "Adjective with no article at all. Which ending?", back: "The ending der/den/dem/des would have.", example: "gut**er** Wein · mit gut**em** Wein · heutig**e** Jugendliche" },
+  { id: "adj-nom-der", tree: "adjective", front: "Adjective after der / die / das in Nominativ singular. Which ending?", back: "-e", example: "der neu**e** Lehrer", gloss: "neu = шинэ · der Lehrer = багш" },
+  { id: "adj-en", tree: "adjective", front: "Adjective after an article in Dativ, in Genitiv, or in the plural. Which ending?", back: "-en", example: "mit dem neu**en** Lehrer · die neu**en** Bücher", gloss: "der Lehrer = багш · die Bücher = номнууд" },
+  { id: "adj-bare-ein", tree: "adjective", front: "Adjective after bare ein (no ending), with a der-noun or a das-noun. Which ending?", back: "-er (der-noun), -es (das-noun): the adjective shows the gender.", example: "ein neu**er** Tisch · ein neu**es** Buch", gloss: "der Tisch = ширээ · das Buch = ном" },
+  { id: "adj-no-article", tree: "adjective", front: "Adjective with no article at all. Which ending?", back: "The ending der/den/dem/des would have.", example: "gut**er** Wein · mit gut**em** Wein · heutig**e** Jugendliche", gloss: "gut = сайн · der Wein = дарс · heutig = өнөөгийн · die Jugendlichen = залуучууд" },
   // Hidden verb
-  { id: "hv-sein", tree: "hidden_verb", front: "The Mongolian sentence ends in an adjective or noun with байна, or with no verb at all (Би ядарсан, Тэр оюутан).", back: "Add sein.", example: "Ich **bin** müde. Er **ist** Student." },
-  { id: "hv-haben", tree: "hidden_verb", front: "Mongolian: надад … байна / …-тай (I have).", back: "haben + Akkusativ.", example: "Ich **habe** einen Bruder." },
+  { id: "hv-sein", tree: "hidden_verb", front: "The Mongolian sentence ends in an adjective or noun with байна, or with no verb at all (Би ядарсан, Тэр оюутан).", back: "Add sein.", example: "Ich **bin** müde. Er **ist** Student.", gloss: "müde = ядарсан · der Student = оюутан" },
+  { id: "hv-haben", tree: "hidden_verb", front: "Mongolian: надад … байна / …-тай (I have).", back: "haben + Akkusativ.", example: "Ich **habe** einen Bruder.", gloss: "der Bruder = ах / эрэгтэй дүү" },
 ];
