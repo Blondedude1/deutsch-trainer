@@ -22,19 +22,44 @@ import { BackLink, Button, Card, Chip, Loading, Rich } from "../ui/primitives";
 
 type Phase = "loading" | "question" | "answered" | "done" | "error";
 
+// Labels only: examples live in the instruction line and always use a different word,
+// so a placeholder can never give the answer away.
 const FIELDS: Record<StudyCard["deck"], { label: string; placeholder: string }[]> = {
   sentence: [{ label: "Your German", placeholder: "" }],
   verb: [
-    { label: "Präteritum (er …)", placeholder: "fuhr" },
-    { label: "Perfekt (er …)", placeholder: "ist gefahren" },
+    { label: "Präteritum (er-form)", placeholder: "" },
+    { label: "Perfekt (er-form, with hat / ist)", placeholder: "" },
   ],
-  pair: [{ label: "German", placeholder: "" }],
+  pair: [{ label: "German expression", placeholder: "" }],
   noun: [
-    { label: "Singular with article", placeholder: "die Schwester" },
-    { label: "Plural", placeholder: "die Schwestern" },
+    { label: "Singular with der / die / das", placeholder: "" },
+    { label: "Plural with die", placeholder: "" },
   ],
-  rule: [{ label: "Your answer (optional, then show)", placeholder: "" }],
+  rule: [{ label: "Your answer (optional)", placeholder: "" }],
 };
+
+/** One plain line telling you exactly what to do, with an example from another word. */
+function instructionFor(card: StudyCard): { text: string; example?: string } {
+  const c = card.content;
+  switch (c.kind) {
+    case "sentence": {
+      const v = variantOf(card)!;
+      return v.type === "fill_gap"
+        ? { text: "Type only the missing word(s) for the gap ___.", example: "Ich helfe ___ Kind. → dem" }
+        : { text: "Translate the Mongolian sentence into German.", example: "Би ядарсан байна. → Ich bin müde." };
+    }
+    case "verb": {
+      const ex = c.inf === "gehen" ? "kommen → kam · ist gekommen" : "gehen → ging · ist gegangen";
+      return { text: "Write the er-form in Präteritum, then in Perfekt (hat or ist + Partizip II).", example: ex };
+    }
+    case "pair":
+      return { text: "Write the German fixed expression. The + Akk / + Dat part is optional.", example: "асуулт асуух → eine Frage stellen" };
+    case "noun":
+      return { text: "Write the noun with its article, then the plural.", example: "ном → das Buch · die Bücher" };
+    case "rule":
+      return { text: "Answer in your head (or type it), then tap Show answer and rate how well you knew it." };
+  }
+}
 
 /** The variant a sentence card shows this time: rotates with each review. */
 function variantOf(card: StudyCard) {
@@ -305,10 +330,18 @@ export function StudyRunner() {
 
             {phase === "answered" && intervals && (
               card.deck === "rule" ? (
-                <div className="grid grid-cols-4 gap-1.5">
-                  {([[Rating.Again, "Again"], [Rating.Hard, "Hard"], [Rating.Good, "Good"], [Rating.Easy, "Easy"]] as const).map(([r, l]) => (
-                    <RateButton key={l} label={l} interval={intervals[r]} onClick={() => finish(r)} primary={r === Rating.Good} />
-                  ))}
+                <div className="flex flex-col gap-1.5">
+                  <div className="grid grid-cols-4 gap-1.5">
+                    {([[Rating.Again, "Again"], [Rating.Hard, "Hard"], [Rating.Good, "Good"], [Rating.Easy, "Easy"]] as const).map(([r, l]) => (
+                      <RateButton key={l} label={l} interval={intervals[r]} onClick={() => finish(r)} primary={r === Rating.Good} />
+                    ))}
+                  </div>
+                  <p className="m-0 grid grid-cols-4 gap-1.5 text-center text-[11px] leading-tight text-muted">
+                    <span>didn&apos;t know</span>
+                    <span>knew, with effort</span>
+                    <span>knew it</span>
+                    <span>knew instantly</span>
+                  </p>
                 </div>
               ) : forced !== null ? (
                 <RateButton label={forced === Rating.Again ? "Again" : "Hard"} interval={intervals[forced]} onClick={() => finish(forced)} primary wide />
@@ -341,8 +374,13 @@ function RateButton({ label, interval, onClick, primary, wide }: { label: string
 
 function Front({ card }: { card: StudyCard }) {
   const c = card.content;
+  const how = instructionFor(card);
   return (
     <Card className="flex flex-col gap-2.5">
+      <div className="flex flex-col gap-0.5 border-b border-divider pb-2.5">
+        <p className="m-0 text-[13px] leading-snug text-soft">{how.text}</p>
+        {how.example && <p className="m-0 font-mono text-[12px] text-muted">e.g. {how.example}</p>}
+      </div>
       {c.kind === "sentence" && (() => {
         const v = variantOf(card)!;
         return (
